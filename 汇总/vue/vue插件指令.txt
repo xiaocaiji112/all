@@ -1,0 +1,7 @@
+yarn add vue-router@4
+
+yarn add vuex@next --save
+
+yarn add element-plus
+
+yarn add axios

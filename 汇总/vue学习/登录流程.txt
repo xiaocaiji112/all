@@ -1,0 +1,93 @@
+1.首先你不得 加载完页面路由到登陆页面啊
+ mounted() {
+this.$router.push('/login')
+	}
+
+然后你登录可以用校验的
+这里是登录页面的  提交方法
+	methods: {
+			onSubmit() {
+				//注意这个user 必须是上面的ref 也是user  valid 是判断有没有错误
+				this.$refs.user.validate(valid => {    //注意这里调用了 vuex的方法 actions的方法
+					if (valid) {
+						this.$store.dispatch("LOGIN", this.user).then(res => {
+							console.log(res)
+							if(res.status === 200){                                            
+									this.$router.push('/MyMain')
+									ElMessage({
+										message: '登陆成功',
+										type: 'success',
+											})
+							}else{
+								ElMessage({
+									message: '密码错误',
+									type: 'error',
+								})
+							}
+						
+						});
+					} else {
+						ElMessage({
+							message: '数据不对昂',
+							type: 'error',
+						})
+					}
+				})
+			}
+		}
+
+
+这里是 store 中的user模块中的actions方法
+
+mutations: {
+		SAVE_USER(state, username) {
+			state.username = username;
+		},
+		SAVE_NICKNAME(state, nickname) {
+			state.nickname = nickname;
+		},
+		SAVE_TOKEN(state, token) {
+			state.token = token;
+		},
+	},
+	actions: {
+		
+		
+		LOGIN({commit}, user) {
+
+			return new Promise(function(resolve) {              //这里通过return new promise 使得 前面的方法可以用.then
+				addUser(user).then(res => {
+					commit("SAVE_USER", res.data.user.userName);
+					commit("SAVE_NICKNAME", res.data.user.nickName);
+					commit("SAVE_TOKEN", res.data.token);
+					storage.saveSessionObject("LoginUser", res.data);
+					resolve(res);
+				})
+
+			})
+
+		}
+
+	}
+
+登录成功之后应该将 vux中的 数据填充并且在会话存储中 存储数据 这个需要一个工具
+
+export default {
+	saveSessionString(key, value) {
+		window.sessionStorage.setItem(key, value)
+	},
+	getSessionStirng(key) {
+		return window.sessionStorage.getItem(key)
+	},
+	saveSessionObject(key, value) {
+		window.sessionStorage.setItem(key, JSON.stringify(value));
+	},
+	getSessionObject(key) {
+		return JSON.parse(window.sessionStorage.getItem(key));
+	},
+	remove(key) {
+		return window.sessionStorage.removeItem(key)
+	}
+}
+
+

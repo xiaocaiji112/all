@@ -1,0 +1,6 @@
+在 Ubuntu 20.1.0上的nacos版本2.0.3
+首先就是 startup.sh 第一次启动的时候会报没有JAVA_HOIME路径
+这个时候 用 vim 打开 startup.sh 并且在上面添加你的Javahome 的路径// 图片1
+然后你需要改请求的内存 将2g 改成128m 1g改成 64m  //图片2
+
+对了 你得运行它自带的哪个sql文件 别的版本的不行  哦

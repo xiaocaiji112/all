@@ -1,0 +1,20 @@
+server:
+  port: 8899
+#http://localhost:8899/system/goods/test
+spring:
+  application:
+    name: sshop-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: auth
+          uri: lb://sshop-auth
+          predicates:
+            - Path=/auth/**
+        - id: system
+          uri: lb://sshop-system
+          predicates:
+            - Path=/system/**

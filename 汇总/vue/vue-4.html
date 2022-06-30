@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+        }
+
+        .active {
+            background-color: aqua;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="Root">
+        {{ss}}
+        <!--     <div :class="{ active: isActive }"></div>-->
+        <div v-bind:class="{active : isActive}" class="box"></div>
+        <div v-bind:class="{active : isActive1}" class="box"></div>
+        <div v-bind:class="{active : isActive2}" class="box"></div>
+        <div v-bind:class="{active : isActive3}" class="box"></div>
+        <div v-bind:class="{active : isActive4}" class="box"></div>
+        <div v-bind:class="{active : isActive5}" class="box"></div>
+        <button v-on:click="change">bian</button>
+        <my-vb></my-vb>
+        <qq :style="{color: color}"></qq>
+
+        <div :class="[active99,box99]">123</div>
+
+        <div :style="{ color: activeColor, fontSize: fontSize + 'px' }">9696</div>
+
+        <div :style="styleObject">696</div>
+    
+
+
+        <!--aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-->
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+
+
+    <script>
+        const qq = {
+            template: `<h1>hello</h1>`
+        }
+
+        const myVb = {
+            template: '<h1>hi</h1>'
+        }
+        const qqq = {
+
+            data() {
+                return {
+                    ss: "asdadad啊大苏打",
+                    isActive: true,
+                    isActive1: true,
+                    isActive2: true,
+                    isActive3: true,
+                    isActive4: true,
+                    isActive5: true,
+                    active99: 'active',
+                    box99: 'box',
+                    activeColor: 'red',
+                    fontSize: 30,
+                    color: 'red',
+                    styleObject: {
+                        color: 'red',
+                        fontSize: '13px'
+                    }
+
+                }
+            },
+            components: {
+                qq
+            }
+            ,
+            methods: {
+                change() {
+
+                }
+
+            },
+            mounted() {
+                setInterval(() => {
+                    this.isActive = !this.isActive
+                }, 1000),
+                    setInterval(() => {
+                        this.isActive1 = !this.isActive1
+                    }, 2000),
+                    setInterval(() => {
+                        this.isActive2 = !this.isActive2
+                    }, 3000),
+                    setInterval(() => {
+                        this.isActive3 = !this.isActive3
+                    }, 4000),
+                    setInterval(() => {
+                        this.isActive4 = !this.isActive4
+                    }, 5000),
+                    setInterval(() => {
+                        this.isActive5 = !this.isActive4
+                    }, 6000)
+            }
+
+        }
+
+
+        var s = Vue.createApp(qqq);
+        s.component("my-vb", myVb)
+        s.mount("#Root");
+
+    </script>
+
+
+</body>
+
+</html>

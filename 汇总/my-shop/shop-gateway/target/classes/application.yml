@@ -1,0 +1,25 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: shop-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+        port: 8127
+    gateway:
+      routes:
+          - id: shop-system
+            uri: lb://shop-system
+            predicates:
+              - Path=/system/**
+          - id: shop-auth
+            uri: lb://shop-auth
+            predicates:
+              - Path=/auth/**
+      enabled: true

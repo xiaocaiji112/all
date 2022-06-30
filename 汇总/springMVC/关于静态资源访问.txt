@@ -1,0 +1,5 @@
+
+    <mvc:resources mapping="/css/**" location="/static/css/"/>
+    <mvc:resources mapping="/js/**" location="/static/js/"/>
+
+mapping 意思是 访问 中的  比如  .../css/index.css 这就不走视图解析器 而是去访问 app目录中的  static/css/中的index.css

@@ -1,0 +1,18 @@
+//这个是全局的转换器
+
+<mvc:annotation-driven conversion-service="conversionService"/>
+      <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+          <property name="converters">
+              <set>
+                  <bean class="com.czh.config.DataConverter" id="converter"/>
+              </set>
+          </property>
+      </bean>
+
+
+
+需要实现Converter接口
+//注意这个 <mvc:annotation-driven conversion-service="conversionService"/> 会覆盖 
+
+还有一个不是全局的
+@DateTimeFormat(pattern = "yyyy-MM-dd")

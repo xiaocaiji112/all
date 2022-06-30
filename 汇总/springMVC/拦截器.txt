@@ -1,0 +1,44 @@
+<mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 
+              <mvc:mapping path="/**"/> 拦截的路径
+            /**是指所有文件及其子孙文件夹
+            /* 是指所有文件但是不包括子孙文件
+            / web的根目录-->
+            <mvc:mapping path="/**"/>
+            <!--不拦截的路径-->
+            <mvc:exclude-mapping path="/toLogin"/>
+            <mvc:exclude-mapping path="login"/>
+           <!-- 自己定义的拦截器-->
+            <bean id="" class=""/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+
+package com.czh.intercepter;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class myInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+      //  HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+        System.out.println("---------------------postHandle");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+       // HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+        System.out.println("---------------afterCompletion");
+    }
+}

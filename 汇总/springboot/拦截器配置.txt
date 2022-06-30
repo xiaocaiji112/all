@@ -1,0 +1,64 @@
+//首先正常写拦截器
+
+package com.czh.interceptor;
+
+import com.czh.core.RedisTemplate;
+import com.czh.entity.LoginUser;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@Component
+public class Interceptor implements HandlerInterceptor {
+
+    RedisTemplate redisTemplate = new RedisTemplate();
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("进入拦截器啦");
+        String authorV = request.getHeader("AuthorV");
+        System.out.println(authorV);
+        if(authorV == null){
+            return false;
+        }else {
+            LoginUser redisTemplateObject = null;
+            redisTemplateObject = redisTemplate.getObject(authorV, LoginUser.class);
+            if(redisTemplateObject == null){
+                return false;
+            }else {
+                redisTemplate.addTime(authorV,10*60L);
+                return true;
+            }
+        }
+    }
+}
+
+//然后写一个config类注册
+
+
+package com.czh.config;
+
+import com.czh.interceptor.Interceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import redis.clients.jedis.JedisPool;
+
+@Configuration
+public class MyConfig implements WebMvcConfigurer {
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        Interceptor interceptor = new Interceptor();
+        registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns("/login");
+    }
+}

@@ -1,0 +1,13 @@
+server:
+  port: 8003
+spring:
+  application:
+    name: shop-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+        port: 8729

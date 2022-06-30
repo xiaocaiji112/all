@@ -1,0 +1,16 @@
+server:
+  port: 8099
+  address: 10.15.241.233
+  servlet:
+    context-path: /email
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/myemail?serverTimezone=Asia/Shanghai
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jmx:
+    enabled: false
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml

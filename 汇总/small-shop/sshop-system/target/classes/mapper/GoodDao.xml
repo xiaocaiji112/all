@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshop.dao.GoodDao">
+
+    <resultMap type="com.sshop.entity.Good" id="GoodMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="stock" column="stock" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="GoodMap">
+        select
+          id, name, price, stock, user_id, publish_time
+        from good
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="GoodMap">
+        select
+          id, name, price, stock, user_id, publish_time
+        from good
+        <where>
+            <if test="good.id != null">
+                and id = #{good.id}
+            </if>
+            <if test="good.name != null and good.name != ''">
+                and name = #{good.name}
+            </if>
+            <if test="good.price != null">
+                and price = #{good.price}
+            </if>
+            <if test="good.stock != null and good.stock != ''">
+                and stock = #{good.stock}
+            </if>
+            <if test="good.userId != null">
+                and user_id = #{good.userId}
+            </if>
+            <if test="good.publishTime != null">
+                and publish_time = #{good.publishTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from good
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="stock != null and stock != ''">
+                and stock = #{stock}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="publishTime != null">
+                and publish_time = #{publishTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into good(name, price, stock, user_id, publish_time)
+        values (#{name}, #{price}, #{stock}, #{userId}, #{publishTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into good(name, price, stock, user_id, publish_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.name}, #{entity.price}, #{entity.stock}, #{entity.userId}, #{entity.publishTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into good(name, price, stock, user_id, publish_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.price}, #{entity.stock}, #{entity.userId}, #{entity.publishTime})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        price = values(price),
+        stock = values(stock),
+        user_id = values(user_id),
+        publish_time = values(publish_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update good
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="stock != null and stock != ''">
+                stock = #{stock},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="publishTime != null">
+                publish_time = #{publishTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from good where id = #{id}
+    </delete>
+
+</mapper>
+

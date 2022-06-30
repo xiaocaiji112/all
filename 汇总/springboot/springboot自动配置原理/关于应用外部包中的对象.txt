@@ -1,0 +1,4 @@
+@SpringBootApplication
+这个里面有个@ComponentScan扫包的他不会去扫外部的包
+所以我们要在外面添加@ComponentScan(外部的包名字)
+或者你可以使用@import(外部包的config类名称)

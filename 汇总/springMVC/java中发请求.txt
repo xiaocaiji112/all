@@ -1,0 +1,22 @@
+import com.fasterxml.jackson.core.type.TypeReference;
+
+@Resource
+    private RestTemplate restTemplate;
+
+    private final ObjectMapper objectMapper  = new ObjectMapper();
+
+ResponseEntity<String> forEntity = restTemplate.getForEntity(
+               "https://whois.pconline.com.cn/ipJson.jsp?ip="+request.getRemoteAddr()+"&json=true",
+               String.class);
+
+ String body = forEntity.getBody();
+
+Map<String ,String> map = null;
+        try {
+          map =  customObjectMapper.
+                  readValue(body, new TypeReference<Map<String,String>>() {
+        });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        String data = map.get("addr")+map.get("pro")+map.get("city");

@@ -1,0 +1,100 @@
+
+//这两个是component直接用的
+package com.example.demo.listener;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyApplicationRunner implements ApplicationRunner {
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        System.out.println("MyApplicationRunner");
+    }
+}
+
+
+package com.example.demo.listener;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyCommandLinRunner implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("MyCommandLinRunner");
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//这两个是需要在resource下建立META-INF中建立spring.factories
+//格式 接口全限定名=实现类全限定名
+
+package com.example.demo.listener;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
+
+
+public class MyApplicationContextInitializer implements ApplicationContextInitializer {
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        System.out.println("MyApplicationContextInitializer");
+    }
+}
+
+
+
+package com.example.demo.listener;
+
+import org.springframework.boot.ConfigurableBootstrapContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringApplicationRunListener;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.time.Duration;
+
+public class MySpringApplicationRunListener implements SpringApplicationRunListener {
+    public MySpringApplicationRunListener(SpringApplication application,String[] args) {
+    }
+
+    @Override
+    public void starting(ConfigurableBootstrapContext bootstrapContext) {
+        System.out.println("MySpringApplicationRunListener starting");
+    }
+
+    @Override
+    public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
+        System.out.println("MySpringApplicationRunListener environmentPrepared");    }
+
+    @Override
+    public void contextPrepared(ConfigurableApplicationContext context) {
+        System.out.println("MySpringApplicationRunListener contextPrepared");    }
+
+    @Override
+    public void contextLoaded(ConfigurableApplicationContext context) {
+        System.out.println("MySpringApplicationRunListener contextLoaded");    }
+
+    @Override
+    public void started(ConfigurableApplicationContext context, Duration timeTaken) {
+        System.out.println("MySpringApplicationRunListener started");    }
+
+    @Override
+    public void started(ConfigurableApplicationContext context) {
+        System.out.println("MySpringApplicationRunListener started");    }
+
+    @Override
+    public void ready(ConfigurableApplicationContext context, Duration timeTaken) {
+        System.out.println("MySpringApplicationRunListener ready");    }
+
+    @Override
+    public void running(ConfigurableApplicationContext context) {
+        System.out.println("MySpringApplicationRunListener running");    }
+
+    @Override
+    public void failed(ConfigurableApplicationContext context, Throwable exception) {
+        System.out.println("MySpringApplicationRunListener failed");    }
+}

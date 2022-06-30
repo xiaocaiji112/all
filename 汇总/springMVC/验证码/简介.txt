@@ -1,0 +1,35 @@
+1.引入依赖
+
+        <dependency>
+                <groupId>            com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>2.3.2</version>
+            </dependency>
+
+2.建立configuration 将DefaultKaptcha注入到容器
+3.建立验证码的配置
+
+基本使用：
+1.需要base64来编解码
+2.   
+
+ @Resource(name = "captchaProducerMath")
+    private Producer captchaProducerMath;
+@GetMapping("/captcha")
+    public ResponseEntity<Map<String ,String >> getCaptcha(){
+        String capText = captchaProducerMath.createText();//这个就是验证码 形式： a+b=?@c c为答案
+        String capStr = capText.substring(0, capText.lastIndexOf("@"));//a+b=?
+        String code = capText.substring(capText.lastIndexOf("@") + 1);//c
+        BufferedImage image = captchaProducerMath.createImage(capStr);
+        Map<String,String> map = new HashMap<>();
+
+        // 转换流信息写出
+        FastByteArrayOutputStream os = new FastByteArrayOutputStream();
+        try {
+            ImageIO.write(image, "jpg", os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        map.put("img", Base64.encode(os.toByteArray()));
+        return ResponseEntity.ok(map);
+    }

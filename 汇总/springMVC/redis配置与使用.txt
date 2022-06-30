@@ -1,0 +1,107 @@
+<bean id="jedisPool" class="redis.clients.jedis.JedisPool" >
+        <constructor-arg name="host" value="127.0.0.1"/>
+        <constructor-arg name="port" value="6379"/>
+        <property name="minIdle" value="20"/>
+        <property name="maxIdle" value="30"/>
+        <property name="maxTotal" value="100"/>
+ </bean>
+
+
+
+
+package com.czh.core;
+
+import com.czh.config.CustomObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisException;
+
+import javax.annotation.Resource;
+
+@Component
+@Slf4j
+public class RedisTemplate {
+    //或者autoware
+    @Resource
+    private JedisPool jedisPool;
+
+    @Resource
+    private CustomObjectMapper objectMapper;
+
+
+    public String set(String  key,String value, Long expire){
+        Jedis jedis = jedisPool.getResource();
+        String returnValue = null;
+        try {
+            returnValue = jedis.setex(key, expire, value);
+        }catch (JedisException jedisException){
+            log.error("redis execution error",jedisException);
+            jedisPool.returnBrokenResource(jedis);
+        }finally {
+            jedisPool.returnResource(jedis);
+        }
+        return returnValue;
+    }
+
+    public String get(String  key){
+        Jedis jedis = jedisPool.getResource();
+        String returnValue = null;
+        try {
+            returnValue = jedis.get(key);
+        }catch (JedisException jedisException){
+            log.error("redis execution error",jedisException);
+            jedisPool.returnBrokenResource(jedis);
+        }finally {
+            jedisPool.returnResource(jedis);
+        }
+        return returnValue;
+    }
+
+    public String setObject(String  key,Object value, Long expire){
+        Jedis jedis = jedisPool.getResource();
+        String returnValue = null;
+        try {
+            //先序列化成json
+            String jsonValue = objectMapper.writeValueAsString(value);
+            if(expire <=0){
+                returnValue = jedis.set(key, jsonValue);
+            }else {
+                returnValue = jedis.setex(key, expire, jsonValue);
+            }
+        }catch (JedisException jedisException){
+            log.error("redis execution error",jedisException);
+            jedisPool.returnBrokenResource(jedis);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+        return returnValue;
+    }
+
+    public <T> T getObject(String  key,Class<T> clazz){
+        Jedis jedis = jedisPool.getResource();
+        String returnValue = null;
+        T object = null;
+        try {
+            //从redis中获取
+            returnValue = jedis.get(key);
+            object = objectMapper.readValue(returnValue, clazz);
+        }catch (JedisException jedisException){
+            log.error("redis execution error",jedisException);
+            jedisPool.returnBrokenResource(jedis);
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+        return object;
+    }
+
+}

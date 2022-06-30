@@ -1,0 +1,12 @@
+ResponseEntity<String> forEntity = restTemplate.getForEntity(
+               "http://whois.pconline.com.cn/ipJson.jsp?ip="+request.getRemoteAddr()+"&json=true", String.class);
+     String body = forEntity.getBody();
+
+        Map<String ,String> map = null;
+        try {
+          map =  customObjectMapper.
+                  readValue(body, new TypeReference<Map<String,String>>() {
+        });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
