@@ -1,0 +1,14 @@
+<dependency>
+      <groupId>eu.bitwalker</groupId>
+      <artifactId>UserAgentUtils</artifactId>
+         <version>1.20</version>
+    </dependency>
+
+
+UserAgent userAgent = new UserAgent(request.getHeader("User-Agent"));
+
+
+获取操作系统
+userAgent.getOperatingSystem().getName()
+获取浏览器名称
+userAgent.getBrowser().getName()

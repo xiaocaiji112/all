@@ -1,0 +1,24 @@
+需要一个服务端 
+然后客户端
+这个是服务端的
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-server</artifactId>
+        </dependency>
+在主类中要@EnableAdminServer
+
+然后是客户端
+    <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+        </dependency>
+
+这个需要配置文件
+application.yml/properties
+
+spring.boot.admin.client.url=http://localhost:9000 //指定监听的端口
+
+management.endpoint.health.show-details=always
+management.endpoints.web.exposure.include=*  //开启所有端口
+
+完事之后就可以直接访问server的 url 例如 localhost:9000

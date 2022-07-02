@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+
+
+    <div id="counter">
+
+        <ol>
+            <!--
+             现在我们为每个 todo-item 提供 todo 对象
+             todo 对象是变量，即其内容可以是动态的。
+             我们也需要为每个组件提供一个“key”，稍后再
+             作详细解释。
+           -->
+            <todo-item v-for="item in groceryList" v-bind:todo="item" v-bind:key="item.id"></todo-item>
+        </ol>
+        <hr>
+        <ol>
+            <!-- 创建一个 todo-item 组件实例 -->
+            <sodo-item></sodo-item>
+        </ol>
+
+        <div>
+            <ol>
+                <li v-for="tool in tools">{{tool.text}}</li>
+                <li v-for="tool in tools">{{tool.getss}}</li>
+            </ol>
+        </div>
+
+        <span v-if="show">
+            kan
+        </span>
+        <button v-on:click="hide">yc</button>
+
+
+        <div v-bind:title="message">
+            Counter: {{ counter }}
+            <button v-on:click="plus10">+10</button>
+        </div>
+        <hr>
+        <input type="text" name="" id="" v-model="counter">
+        <input type="text" name="" id="" v-model="formData.password">
+        <button v-on:click="submit">提交</button>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+
+
+    <script>
+
+        const TodoItem = {
+            props: ['todo'],
+            template: `<li>{{ todo.text }}</li>`
+        }
+
+        const SodoItem = {
+            template: `<li>This is a todo</li>`
+        }
+
+        const Counter = {
+
+
+            data() {
+                return {
+                    counter: 0,
+                    message: "sdsd",
+                    formData: {
+                        uasename: '',
+                        password: ''
+                    },
+                    show: false,
+                    tools: [{ text: '吃饭', getss: 'sss' }, { text: '吃饭', getss: 'sss' }, { text: '吃饭', getss: 'sss' }],
+                    groceryList: [{ id: 0, text: 'Vegetables' },
+                    { id: 1, text: 'Cheese' },
+                    { id: 2, text: 'Whatever else humans are supposed to eat' }]
+
+                }
+            }
+
+            , mounted() {
+                setInterval(() => {
+                    this.counter++
+                }, 1000)
+            },
+            methods: {
+                plus10() {
+                    this.counter += 10
+                },
+                submit() {
+                    console.log(this.formData)
+                },
+                hide() {
+                    this.show = !this.show
+                }
+            },
+            components: {
+                SodoItem ,// 注册一个新组件,
+                TodoItem
+            }
+
+        }
+
+        Vue.createApp(Counter).mount('#counter')
+    </script>
+</body>
+
+</html>

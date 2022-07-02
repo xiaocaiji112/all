@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="study-common-core" />
+        <module name="study-api" />
+        <module name="study-system" />
+        <module name="study-common-security" />
+        <module name="study-auth" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="spring-system" target="8" />
+      <module name="study-common-srcurity" target="8" />
+      <module name="study-common-study" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring-cloud-security" options="-parameters" />
+      <module name="spring-system" options="-parameters" />
+      <module name="study-api" options="-parameters" />
+      <module name="study-auth" options="-parameters" />
+      <module name="study-common" options="-parameters" />
+      <module name="study-common-core" options="-parameters" />
+      <module name="study-common-security" options="-parameters" />
+      <module name="study-common-srcurity" options="-parameters" />
+      <module name="study-common-study" options="-parameters" />
+      <module name="study-system" options="-parameters" />
+    </option>
+  </component>
+</project>

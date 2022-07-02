@@ -1,0 +1,57 @@
+解决方案 
+1.  可以使用fillter 
+
+package com.czh.fillter;
+
+import javax.annotation.processing.Filer;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class MyFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+        httpServletResponse.setHeader("Access-Control-Allow-Origin","*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods","POST,GET");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers","Content-Type");
+        httpServletResponse.setHeader("Access-Control-Max-Age","3600");
+
+    }
+}
+
+<filter>
+  <filter-name>kuayu</filter-name>
+  <filter-class>com.czh.fillter.MyFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>kuayu</filter-name>
+  <url-pattern>/user/**</url-pattern>
+</filter-mapping>
+2.可以使用注解
+
+@RestController
+
+这个前端 axios 前端服务器给自己发 然后 前端服务器转发到后端服务器
+
+
+  前端代码//////////////////////////////////////////
+
+vue.config.js   与src同级别
+module.exports = {
+  devServer: {
+      port:8080,                              //这个是前端服务器的端口
+    proxy: 'http://localhost:8099', //转发到后端服务器
+      
+    
+  }
+}
+/////////////////////////////////////
+3.配全局
+
+
+    <mvc:cors>
+        <mvc:mapping path="/user/**"/>
+    </mvc:cors>
+
+

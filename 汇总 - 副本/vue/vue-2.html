@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="Root">
+        {{ss}}
+        <qq></qq>
+
+
+        {{ ok ? 'YES' : 'NO' }}
+
+        <div v-bind:id="dynamicId">{{dynamicId}}</div>
+        <br>
+        <span v-once>这个将不会改变: {{ dynamicId }}</span>
+        <button v-on:click="change">改变</button>
+
+        <p>Using mustaches: {{ ht }}</p>
+        <p>Using v-html directive: <span v-html="ht"></span></p>
+
+        <button v-bind:disabled="isButtonDisabled" v-on:click="change2">按钮2</button>
+
+        <a v-bind:[attributeName]="url"> 666666 </a>
+        <br>
+        <hr>
+
+
+        <p>Has published books:</p>
+        <span>{{ author.books.length > 0 ? 'Yes' : 'No' }}</span>
+
+
+
+    </div>
+
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+
+        const qq = {
+            template: `<h1>hello</h1>`
+        }
+        const dataProperty = {
+            attributeName: "href"
+        }
+
+        const qqq = {
+
+            data() {
+                return {
+                    ss: "asdadad啊大苏打",
+                    dynamicId: 10,
+                    ht: `<h1>卧槽这个东西</h1>`,
+                    isButtonDisabled: false,
+                    ok: true,
+                    url: "http://www.baidu.com",
+                    author: {
+                        name: 'John Doe',
+                        books: [
+                            'Vue 2 - Advanced Guide',
+                            'Vue 3 - Basic Guide',
+                            'Vue 4 - The Mystery'
+                        ]
+                    }
+
+                }
+            },
+            methods: {
+                change() {
+                    this.dynamicId = 999
+                },
+                change2() {
+                    this.isButtonDisabled = !this.isButtonDisabled
+                },
+                toTitleDate(data) {
+                    return this.data.ok
+                },
+                formatDate(date) {
+                    return this.date.ss
+                }
+
+            },
+            components: {
+                qq,
+                dataProperty
+            },
+            computed: {
+                // 计算属性的 getter
+                publishedBooksMessage() {
+                    // `this` 指向 vm 实例
+                    return this.author.books.length > 0 ? 'Yes' : 'No'
+                }
+            }
+
+        }
+
+        Vue.createApp({
+            qqq, data() {
+                return { attributeName: "href" }
+            }
+        }).mount("#Root");
+
+    </script>
+
+
+</body>
+
+</html>

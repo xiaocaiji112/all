@@ -1,0 +1,9 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: study-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848

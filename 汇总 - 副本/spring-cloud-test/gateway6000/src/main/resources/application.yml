@@ -1,0 +1,17 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: myconsumer
+          uri: lb://consumer
+          predicates:
+            - Path=/consumer/**
+     # enabled: true

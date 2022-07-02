@@ -1,0 +1,41 @@
+//有问题啊  我也不会 希望以后的你能搞清楚 2022.3.10
+
+@GetMapping("/load/{fileName}")
+    public R load(HttpServletResponse httpServletResponse,@PathVariable("fileName") String fileName){
+
+
+        FileInputStream fileInputStream = null;
+        ServletOutputStream outputStream = null;
+        System.out.println("fileName = " + fileName);
+        File file = new File("C://image/"+fileName);
+        if (!file.exists()){
+            System.out.println("?");
+            return R.error();
+        }
+        httpServletResponse.reset();//设置页面不缓存 清空buffer
+        httpServletResponse.setCharacterEncoding("UTF-8");//字符编码
+        httpServletResponse.setContentType("multipart/form-data");//二进制传输数据
+        //设置响应头
+        //Content-Disposition属性有两种类型inline 和attachment
+        //inline：将文件内容直接显示在页面
+        //attachment：弹出对话框让用户下载具体例子：
+        try {
+            httpServletResponse.setHeader("Content-Disposition",
+                    "attachment;fileName="+
+                            URLEncoder.encode(fileName,"UTF-8"));
+
+             fileInputStream = new FileInputStream(file);
+             outputStream = httpServletResponse.getOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = fileInputStream.read(buffer)) != -1){
+                outputStream.write(buffer,0,len);
+            }
+            outputStream.flush();
+           } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+        return R.success();
+    }

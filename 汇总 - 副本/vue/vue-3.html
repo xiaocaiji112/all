@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="Root">
+        {{ss}}
+
+        <p>Has published books:</p>
+        <span>{{ author.books.length > 0 ? 'Yes' : 'No' }}</span>
+        <span>{{publishedBooksMessage}}</span>
+
+        <div>{{fullName}}</div>
+        <input type="text" v-model="firstName">
+        <input type="text" v-model="lastName">
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+        const qq = {
+            template: `<h1>hello</h1>`
+        }
+
+        const qqq = {
+
+            data() {
+                return {
+                    ss: "asdadad啊大苏打",
+                    author: {
+                        name: 'John Doe',
+                        books: [
+                            'Vue 2 - Advanced Guide',
+                            'Vue 3 - Basic Guide',
+                            'Vue 4 - The Mystery'
+                        ]
+                    },
+                    firstName: 'Foo',
+                    lastName: 'Bar'
+                   
+
+                }
+            },
+            
+            methods: {
+
+
+            },
+            components: {
+                qq
+            },
+            computed: {
+                // 计算属性的 getter
+                publishedBooksMessage() {
+                    // `this` 指向 vm 实例
+                    return this.author.books.length
+                },
+                fullName() {
+                    return this.firstName + ' ' + this.lastName
+                }
+            }
+            , mounted() {
+                setInterval(() => {
+                    this.author.books.push('啊啊啊')
+                }, 1000)
+            },
+
+        }
+
+
+        Vue.createApp(qqq).mount("#Root");
+
+    </script>
+
+
+</body>
+
+</html>

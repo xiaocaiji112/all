@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shap.dao.MsgDao">
+
+    <resultMap type="com.shap.entity.Msg" id="MsgMap">
+        <result property="from" column="from_msg" jdbcType="VARCHAR"/>
+        <result property="to" column="to_msg" jdbcType="VARCHAR"/>
+        <result property="msg" column="msg" jdbcType="VARCHAR"/>
+        <result property="count" column="count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getMsgByIndex" resultMap="MsgMap">
+        select
+        from_msg, to_msg, msg, count
+        from msg
+        where  from_msg= #{from} and to_msg=#{to} and count > #{current}
+    </select>
+
+
+
+    <select id="getMsg" resultMap="MsgMap">
+        select
+        from_msg, to_msg, msg, count
+        from msg
+        where  from_msg= #{from} and to_msg=#{to}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into msg(from_msg, to_msg, msg, count)
+        values (#{from}, #{to}, #{msg}, #{count})
+    </insert>
+
+
+
+</mapper>
+

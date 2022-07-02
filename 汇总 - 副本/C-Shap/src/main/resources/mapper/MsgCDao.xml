@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shap.dao.MsgCDao">
+
+    <resultMap type="com.shap.entity.MsgC" id="MsgCMap">
+        <result property="from" column="from_msg" jdbcType="VARCHAR"/>
+        <result property="to" column="to_msg" jdbcType="VARCHAR"/>
+        <result property="currentConout" column="current_conout" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="getCurrent" resultMap="MsgCMap">
+        select
+            from_msg, to_msg, current_conout
+        from msg_c
+        where from_msg = #{from} and to_msg = #{to}
+    </select>
+    <!--通过主键修改数据-->
+    <update id="update">
+        update msg_c
+        <set>
+                from_msg = #{from},
+                to_msg = #{to},
+                current_conout = #{currentConout},
+
+        </set>
+        where   from_msg = #{from} and to_msg = #{to}
+    </update>
+
+
+
+</mapper>
+

@@ -1,0 +1,79 @@
+后端 springboot
+前端vue + element ui
+
+前端： 
+                       -------------------------html------------------                                                                                                                         
+<img v-if="options" v-bind:src="options" alt="">
+<el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
+            <el-button size="small">
+              选择
+              <i class="el-icon-upload el-icon--right"></i>
+             </el-button>
+
+ <el-button type="primary" size="small" @click="uploadImg">提 交</el-button>
+
+--------------------------script-----------------
+
+let options = ref()//这个就是img的src路径
+ 
+let b = ref() //将文件提出去  
+                  //beforeUpload这个是选择文件后执行的操作
+let beforeUpload = function(file) {
+        
+       b.value  = file;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);        //将文件转成url的形式这样 img的src 就可以访问到  这样做的目的就是 你选择了图片之后要预览  所以就需要转化成 url的形式 给到 img
+        reader.onload = () => {
+          options.value = reader.result;   
+      }
+}
+---------------------------api中的上传文件的接口-------------------------------------
+export function uploadAvatar(data){
+	return request({
+		url:'/user/profile',
+		method:'post',
+		data:data,
+		headers:{
+			'Content-Type':
+			'multipart/form-data'
+		}
+	})
+}
+
+----------------------------------------------------------------
+
+//文件上传 
+ let uploadImg = function() {
+        
+        let formData = new FormData();    //其实这个就是构造对象的   这里就相当于构造了一个对象 {file:"",username:''} 这样前端就可以接到
+        formData.append("file", b.value);
+        formData.append("username",store.getters.getUsername)
+        uploadAvatar( formData).then(response => {
+        console.log(response)
+        centerDialogVisible.value = !centerDialogVisible.value
+        });
+    }
+
+
+后端： 
+首先你需要解决前端的img发来的 请求   
+
+vuex中的头像数据 ：   profile=myprofile/这里写的是你电脑的文件目录 比如  myprofile/user/a.png
+后端可以这样做
+实现 implements WebMvcConfigurer这个接口  这个接口就是 搞拦截器的
+重写这个方法
+  @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry)
+    {
+           registry.addResourceHandler("/myprofile" + "/**")  //这个意思就是 如果前端发来的请求中有 myprofile 那么就会拦截然后去本地文件中根据后面的路径找到并返回
+           .addResourceLocations("file:" + "C:\\email\\");    
+
+      }
+
+最好拦截器 excludePathPatterns("/myprofile/**"). 这样就不会拦截到这个请求
+
+-----------------------然后就是保存上传的文件了----------------------------
+
+-----------------------------------------------------------------------------------------
+
+

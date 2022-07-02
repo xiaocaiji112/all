@@ -1,0 +1,22 @@
+server:
+  port: 9000
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: consumer
+  cloud:
+    nacos:
+     discovery:
+       server-addr: localhost:8848
+     config:
+       server-addr: localhost:8848
+       file-extension: yaml
+       namespace:  #e
+       group: DEFAULT_GROUP
+    sentinel:
+      transport:
+        dashboard: localhost:8081
+        port: 8827
+     # web-context-unify: false #关闭收敛URL 如果你要用sentinelResource请关闭他你、

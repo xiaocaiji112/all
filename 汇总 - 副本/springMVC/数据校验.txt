@@ -1,0 +1,29 @@
+ <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.0.9.Final</version>
+    </dependency>
+
+//注入容器 最后还得在 MVC annotation中配置 validator
+
+ <bean id="localValidatorFactoryBean" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+    </bean>
+
+@RequestMapping("/...")
+    public String H(@Validated User3 user, BindingResult br){
+        List<ObjectError> allErrors = br.getAllErrors();
+        Iterator<ObjectError> iterator = allErrors.iterator();
+        while (iterator.hasNext())
+        {
+            ObjectError next = iterator.next();
+            System.out.println(next.getDefaultMessage());
+        }
+        System.out.println("user = " + user);
+        return "hello";
+    }

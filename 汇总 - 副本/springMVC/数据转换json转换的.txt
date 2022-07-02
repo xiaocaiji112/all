@@ -1,0 +1,47 @@
+<!--数据校验-->
+    <bean  id="customObjectMapper"  class="com.czh.config.CustomObjectMapper"/>
+    <bean id="localValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+    </bean>
+    <mvc:annotation-driven validator="localValidator">
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="customObjectMapper"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+
+package com.czh.config;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
+public class CustomObjectMapper extends ObjectMapper {
+    public CustomObjectMapper(){
+        super();
+        configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
+        setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        configure(SerializationFeature.WRITE_NULL_MAP_VALUES,false);
+        setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING,true);
+
+    }
+}
+
+配置好了 直接用
+@Resource
+private CustomObjectMapper objectObject；

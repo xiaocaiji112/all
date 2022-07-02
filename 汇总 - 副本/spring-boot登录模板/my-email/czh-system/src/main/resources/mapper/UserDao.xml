@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czh.system.dao.UserDao">
+
+    <resultMap type="com.czh.common.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+        <result property="creatTime" column="creat_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+          user_id, user_name, password, login_time, creat_time, status, del_flag
+        from user
+        where user_id = #{userId}
+    </select>
+    <select id="queryByName" resultMap="UserMap">
+        select
+            user_id, user_name, password, login_time, creat_time, status, del_flag
+        from user
+        where user_name = #{userName}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+          user_id, user_name, password, login_time, creat_time, status, del_flag
+        from user
+        <where>
+            <if test="user.userId != null">
+                and user_id = #{user.userId}
+            </if>
+            <if test="user.userName != null and user.userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="user.password != null and user.password != ''">
+                and password = #{user.password}
+            </if>
+            <if test="user.loginTime != null">
+                and login_time = #{user.loginTime}
+            </if>
+            <if test="user.creatTime != null">
+                and creat_time = #{user.creatTime}
+            </if>
+            <if test="user.status != null">
+                and status = #{user.status}
+            </if>
+            <if test="user.delFlag != null">
+                and del_flag = #{user.delFlag}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from user
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="loginTime != null">
+                and login_time = #{loginTime}
+            </if>
+            <if test="creatTime != null">
+                and creat_time = #{creatTime}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="delFlag != null">
+                and del_flag = #{delFlag}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into user(user_name, password, login_time, creat_time, status, del_flag)
+        values (#{userName}, #{password}, #{loginTime}, #{creatTime}, #{status}, #{delFlag})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into user(user_name, password, login_time, creat_time, status, del_flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userName}, #{entity.password}, #{entity.loginTime}, #{entity.creatTime}, #{entity.status}, #{entity.delFlag})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into user(user_name, password, login_time, creat_time, status, del_flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.password}, #{entity.loginTime}, #{entity.creatTime}, #{entity.status}, #{entity.delFlag})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name),
+        password = values(password),
+        login_time = values(login_time),
+        creat_time = values(creat_time),
+        status = values(status),
+        del_flag = values(del_flag)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="loginTime != null">
+                login_time = #{loginTime},
+            </if>
+            <if test="creatTime != null">
+                creat_time = #{creatTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from user where user_id = #{userId}
+    </delete>
+
+</mapper>
+

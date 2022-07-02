@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.dao.UserDao">
+
+    <resultMap type="com.shop.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userRole" column="user_role" jdbcType="VARCHAR"/>
+        <result property="userShopNums" column="user_shop_nums" jdbcType="INTEGER"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="userStatus" column="user_status" jdbcType="VARCHAR"/>
+        <result property="userProfile" column="user_profile" jdbcType="VARCHAR"/>
+        <result property="userShopCarId" column="user_shop_car_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+          user_id, user_name, user_role, user_shop_nums, password, create_time, update_time, user_status, user_profile, user_shop_car_id
+        from user
+        where user_id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+          user_id, user_name, user_role, user_shop_nums, password, create_time, update_time, user_status, user_profile, user_shop_car_id
+        from user
+        <where>
+            <if test="user.userId != null">
+                and user_id = #{user.userId}
+            </if>
+            <if test="user.userName != null and user.userName != ''">
+                and user_name = #{user.userName}
+            </if>
+            <if test="user.userRole != null and user.userRole != ''">
+                and user_role = #{user.userRole}
+            </if>
+            <if test="user.userShopNums != null">
+                and user_shop_nums = #{user.userShopNums}
+            </if>
+            <if test="user.password != null and user.password != ''">
+                and password = #{user.password}
+            </if>
+            <if test="user.createTime != null">
+                and create_time = #{user.createTime}
+            </if>
+            <if test="user.updateTime != null">
+                and update_time = #{user.updateTime}
+            </if>
+            <if test="user.userStatus != null and user.userStatus != ''">
+                and user_status = #{user.userStatus}
+            </if>
+            <if test="user.userProfile != null and user.userProfile != ''">
+                and user_profile = #{user.userProfile}
+            </if>
+            <if test="user.userShopCarId != null">
+                and user_shop_car_id = #{user.userShopCarId}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from user
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="userRole != null and userRole != ''">
+                and user_role = #{userRole}
+            </if>
+            <if test="userShopNums != null">
+                and user_shop_nums = #{userShopNums}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="userStatus != null and userStatus != ''">
+                and user_status = #{userStatus}
+            </if>
+            <if test="userProfile != null and userProfile != ''">
+                and user_profile = #{userProfile}
+            </if>
+            <if test="userShopCarId != null">
+                and user_shop_car_id = #{userShopCarId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into user(user_name, user_role, user_shop_nums, password, create_time, update_time, user_status, user_profile, user_shop_car_id)
+        values (#{userName}, #{userRole}, #{userShopNums}, #{password}, #{createTime}, #{updateTime}, #{userStatus}, #{userProfile}, #{userShopCarId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into user(user_name, user_role, user_shop_nums, password, create_time, update_time, user_status, user_profile, user_shop_car_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userName}, #{entity.userRole}, #{entity.userShopNums}, #{entity.password}, #{entity.createTime}, #{entity.updateTime}, #{entity.userStatus}, #{entity.userProfile}, #{entity.userShopCarId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into user(user_name, user_role, user_shop_nums, password, create_time, update_time, user_status, user_profile, user_shop_car_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.userRole}, #{entity.userShopNums}, #{entity.password}, #{entity.createTime}, #{entity.updateTime}, #{entity.userStatus}, #{entity.userProfile}, #{entity.userShopCarId})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name),
+        user_role = values(user_role),
+        user_shop_nums = values(user_shop_nums),
+        password = values(password),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        user_status = values(user_status),
+        user_profile = values(user_profile),
+        user_shop_car_id = values(user_shop_car_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userRole != null and userRole != ''">
+                user_role = #{userRole},
+            </if>
+            <if test="userShopNums != null">
+                user_shop_nums = #{userShopNums},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="userStatus != null and userStatus != ''">
+                user_status = #{userStatus},
+            </if>
+            <if test="userProfile != null and userProfile != ''">
+                user_profile = #{userProfile},
+            </if>
+            <if test="userShopCarId != null">
+                user_shop_car_id = #{userShopCarId},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from user where user_id = #{userId}
+    </delete>
+
+</mapper>
+

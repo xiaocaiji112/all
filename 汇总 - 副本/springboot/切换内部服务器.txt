@@ -1,0 +1,13 @@
+其实就是 Conditiononclass注解
+当你引了tomcat那么他就会起一个tomcat
+当你排除掉tomcat 引入一个别的服务器
+那么他的condition会生效最终就会生成一个该服务器相关的bean
+具体操作
+<dep>
+<exculiong>写要排除的依赖<./...>
+</.>
+
+
+
+//就比方说 你引入 了redis包 然后你就可以直接用redistaplate
+就是因为 springbootautoconfigure这个东西他使用了 @Bean@Conditional里面写了当你引入redis包他才加载到容器之中
